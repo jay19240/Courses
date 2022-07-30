@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>TP01</title>
+</head>
+
+<body>
+  <div>
+    Résolution de x pour f(x) = 0.
+    Définition de f(x) = x*x*x + 2*x*x + 10*x - 20
+  </div>
+  <div>
+    <label for="a">A:</label><br>
+    <input type="number" name="a" id="input-a">
+  </div>
+  <div>
+    <label for="b">B:</label><br>
+    <input type="number" name="b" id="input-b">
+  </div>
+  <div>
+    <div id="out"></div>
+    <button id="valid">Valider</button>
+  </div>
+</body>
+<script>
+  window.onload = function () {
+    let inputA = document.getElementById('input-a');
+    let inputB = document.getElementById('input-b');
+    let valid = document.getElementById('valid');
+    let out = document.getElementById('out');
+
+    valid.addEventListener('click', function () {
+      let v = run_dichotomie(parseInt(inputA.value), parseInt(inputB.value), 0.0002);
+      out.textContent = v;
+    });
+  }
+
+  function run_dichotomie(a, b, precision) {
+    while (b - a > precision) {
+      let m = (a + b) * 0.5;
+      let ap = a * a * a + 2 * a * a + 10 * a - 20;
+      let bp = b * b * b + 2 * b * b + 10 * b - 20;
+      let mp = m * m * m + 2 * m * m + 10 * m - 20;
+
+      if (ap * mp < 0) {
+        b = m;
+      }
+      else {
+        a = m;
+      }
+    }
+
+    return a;
+  }
+
+</script>
+
+</html>

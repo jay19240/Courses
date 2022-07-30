@@ -1,0 +1,77 @@
+<!-- ARC-TANGENT BONUS -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    window.onload = function() {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let arrowAngle = 0;
+      let arrowX = 0;
+      let arrowY = 0;
+      let angle = 0;
+      let centerX = width / 2;
+      let centerY = height / 2;
+      let radius = 200;
+      let speed = 0.01;
+
+      render();
+
+      function render() {
+        context.clearRect(0, 0, width, height);
+
+        arrowX = centerX + Math.cos(angle) * radius;
+        arrowY = centerY + Math.sin(angle) * radius;
+
+        context.save();
+        context.translate(arrowX, arrowY);
+        context.rotate(arrowAngle);
+        context.beginPath();
+        context.moveTo(20,0);
+        context.lineTo(-20,0);
+        context.moveTo(20,0);
+        context.lineTo(10,-10);
+        context.moveTo(20,0);
+        context.lineTo(10,10);
+        context.stroke();
+        context.restore();
+
+        angle += speed;
+
+        requestAnimationFrame(render);
+      }
+
+      canvas.addEventListener('mousemove', e => {
+        let dx = e.clientX - arrowX;
+        let dy =  e.clientY - arrowY;
+        arrowAngle = Math.atan2(dy, dx);
+      });
+    }
+  </script>
+</body>
+
+</html>

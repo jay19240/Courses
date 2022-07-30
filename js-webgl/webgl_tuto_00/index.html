@@ -1,0 +1,26 @@
+<html>
+
+<head>
+  <script rel="preload" type="text/javascript" src="libs/gl-matrix.js"></script>
+  <script rel="preload" type="text/javascript" src="main.js"></script>
+</head>
+
+<body>
+  <canvas id="glCanvas" width="640" height="480"></canvas>
+</body>
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
+  attribute vec2 a_position;
+  uniform vec2 u_resolution;
+   
+  void main() {
+     vec2 zeroToOne = a_position / u_resolution;
+
+     // convertit de 0->1 à 0->2
+     vec2 zeroToTwo = zeroToOne * 2.0;
+     // convertit de 0->2 à -1->+1 (clipspace)
+     vec2 clipSpace = zeroToTwo - 1.0;
+     gl_Position = vec4(clipSpace, 0, 1);
+  }
+  </script>
+
+</html>

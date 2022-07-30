@@ -1,0 +1,86 @@
+<!-- VELOCITY -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    class Particule {
+      constructor() {
+        this.position = [0, 0];
+        this.radius = 0;
+        this.velocity = [0, 0];
+      }
+
+      static create(x, y, radius, direction, speed) {
+        let p = new Particule();
+        p.position[0] = x;
+        p.position[1] = y;
+        p.radius = radius;
+        p.velocity[0] = Math.cos(direction) * speed;
+        p.velocity[1] = Math.sin(direction) * speed;
+        return p;
+      }
+
+      update() {
+        this.position[0] += this.velocity[0];
+        this.position[1] += this.velocity[1];
+      }
+    };
+
+    window.onload = function() {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let spawnX = width / 2;
+      let spawnY = height / 2;
+      let numParticules = 100;
+      let particules = [];
+      
+      for (let i = 0; i < numParticules; i++) {
+        let direction = Math.random() * Math.PI * 2;
+        let p = Particule.create(spawnX, spawnY, 10, direction, Math.random() * 4);
+        particules.push(p);
+      }
+
+      render();
+
+      function render() {
+        context.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < numParticules; i++) {
+          let p = particules[i];
+          context.beginPath();
+          context.arc(p.position[0], p.position[1], p.radius, 0, Math.PI * 2, false);
+          context.fill();
+          p.update();
+        }
+
+        requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+
+</html>

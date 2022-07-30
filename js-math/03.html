@@ -1,0 +1,63 @@
+<!-- COURBE DE LISSAJOUS -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    window.onload = function() {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      let gravityX = width * .5;
+      let gravityY = height * .5;
+      let radiusX = 200;
+      let radiusY = 400;
+      let speedX = .1;
+      let speedY = .131;
+      let angleX = 0;
+      let angleY = 0;
+
+      render();
+
+      function render() {
+        let x = gravityX + Math.cos(angleX) * radiusX;
+        let y = gravityY + Math.sin(angleY) * radiusY;
+
+        context.clearRect(0, 0, width, height);
+        context.beginPath();
+        context.arc(x, y, 10, 0, Math.PI * 2, false);
+        context.fill();
+        
+        angleX += speedX;
+        angleY += speedY;
+
+        requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+
+</html>

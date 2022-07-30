@@ -1,0 +1,167 @@
+<!-- ACCELERATION FLYING -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    const KEY_LEFT = 39;
+    const KEY_RIGHT = 37;
+    const KEY_UP = 38;
+    const KEY_DOWN = 40;
+
+    class Aircraft {
+      constructor() {
+        this.position = [0, 0];
+        this.rotation = 0;
+        this.velocity = [0, 0];
+      }
+
+      static create(x, y, rotation) {
+        let p = new Aircraft();
+        p.position[0] = x;
+        p.position[1] = y;
+        p.rotation = rotation;
+        return p;
+      }
+
+      accelerate(x, y) {
+        this.velocity[0] += x;
+        this.velocity[1] += y;
+      }
+
+      update() {
+        this.position[0] += this.velocity[0];
+        this.position[1] += this.velocity[1];
+      }
+
+      draw(context) {
+        context.save();
+        context.translate(this.position[0], this.position[1]);
+        context.rotate(this.rotation);
+        context.beginPath();
+        context.moveTo(20,0);
+        context.lineTo(-20,0);
+        context.moveTo(20,0);
+        context.lineTo(10,-10);
+        context.moveTo(20,0);
+        context.lineTo(10,10);
+        context.stroke();
+        context.restore();
+      }
+    };
+
+    window.onload = function () {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let keyLeft = false;
+      let keyRight = false;
+      let keyUp = false;
+      let keyDown = false;
+
+      let spawnX = width / 2;
+      let spawnY = height / 2;
+      let aircraft = Aircraft.create(spawnX, spawnY, 0);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.which == KEY_LEFT) {
+          keyLeft = true;
+        }
+        if (e.which == KEY_RIGHT) {
+          keyRight = true;
+        }
+        if (e.which == KEY_UP) {
+          keyUp = true;
+        }
+        if (e.which == KEY_DOWN) {
+          keyDown = true;
+        }
+      });
+
+      document.addEventListener('keyup', (e) => {
+        if (e.which == KEY_LEFT) {
+          keyLeft = false;
+        }
+        if (e.which == KEY_RIGHT) {
+          keyRight = false;
+        }
+        if (e.which == KEY_UP) {
+          keyUp = false;
+        }
+        if (e.which == KEY_DOWN) {
+          keyDown = false;
+        }
+      });
+
+      render();
+
+      function render() {
+        context.clearRect(0, 0, width, height);
+
+        if (keyLeft) {
+          aircraft.rotation -= 0.1;
+        }
+
+        if (keyRight) {
+          aircraft.rotation += 0.1;
+        }
+
+        if (keyUp) {
+          let x = Math.cos(aircraft.rotation) * 0.1;
+          let y = Math.sin(aircraft.rotation) * 0.1;
+          aircraft.accelerate(x, y);
+        }
+        
+        if (keyDown) {
+          let x = Math.cos(aircraft.rotation) * 0.1 * -1;
+          let y = Math.sin(aircraft.rotation) * 0.1 * -1;
+          aircraft.accelerate(x, y);
+        }
+
+        if (aircraft.position[0] > width) {
+          aircraft.position[0] = 0;
+        }
+        else if (aircraft.position[0] <= 0) {
+          aircraft.position[0] = width;
+        }
+
+        if (aircraft.position[1] > height) {
+          aircraft.position[1] = 0;
+        }
+        else if (aircraft.position[1] <= 0) {
+          aircraft.position[1] = height;
+        }
+
+        aircraft.update();
+        aircraft.draw(context);
+
+        requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+
+</html>

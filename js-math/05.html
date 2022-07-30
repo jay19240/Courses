@@ -1,0 +1,67 @@
+<!-- ARC-TANGENT -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    window.onload = function() {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let angle = 0;
+      let arrowX = width / 2;
+      let arrowY = height / 2;
+
+      render();
+
+      function render() {
+        context.clearRect(0, 0, width, height);
+
+        context.save();
+        context.translate(arrowX, arrowY);
+        context.rotate(angle);
+        context.beginPath();
+        context.moveTo(20,0);
+        context.lineTo(-20,0);
+        context.moveTo(20,0);
+        context.lineTo(10,-10);
+        context.moveTo(20,0);
+        context.lineTo(10,10);
+        context.stroke();
+        context.restore();
+
+        requestAnimationFrame(render);
+      }
+
+      canvas.addEventListener('mousemove', e => {
+        let dx = e.clientX - arrowX;
+        let dy =  e.clientY - arrowY;
+        angle = Math.atan2(dy, dx);
+      });
+    }
+  </script>
+</body>
+
+</html>

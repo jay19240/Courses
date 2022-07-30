@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+</head>
+
+<body></body>
+<script>
+  window.onload = function () {
+    let arr = [1, 8, 3, -4, 0, 4];
+    console.log('min:' + min(arr));
+  }
+
+  function min(arr) {
+    let min = arr[0];
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] < min) {
+        min = arr[i];
+      }
+    }
+
+    return min;
+  }
+
+  function max(arr) {
+    let max = arr[0];
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] > max) max = arr[i];
+    }
+
+    return max;
+  }
+
+  function indexOf(arr, value) {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] == value) return i;
+    }
+
+    return -1;
+  }
+
+  function pitch(arr) {
+    let minimum = min(v);
+    let maximum = max(v);
+
+    return maximum - minimum;
+  }
+
+  function nearZero(arr) {
+    let near = arr[0];
+
+    for (let i = 0; i < arr.length; i++) {
+      if (Math.abs(arr[i]) < Math.abs(near)) {
+        near = arr[i];
+      }
+    }
+
+    return near;
+  }
+
+  function count(arr) {
+    let countMap = {};
+
+    for (let i = 0; i < arr.length; i++) {
+      if (countMap[arr[i]]) {
+        countMap[arr[i]] += 1;
+      }
+      else {
+        countMap[arr[i]] = 1;
+      }
+    }
+
+    return countMap;
+  }
+
+  function invert(arr) {
+    let arrInverted = [];
+
+    for (let i = 0; i < arr.length; i++) {
+      arrInverted.push(arr[arr.length - 1 - i]);
+    }
+
+    return arrInverted;
+  }
+</script>
+
+</html>

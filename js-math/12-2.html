@@ -1,0 +1,150 @@
+<!-- BOUNCE -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    const SPAWN_DELAY = 300;
+    const PARTICULES_MAX = 100;
+    const BOUNCE = -0.9;
+
+    class Utils {
+      static createVectorFromDirection(speed, direction) {
+        let x = Math.cos(direction) * speed;
+        let y = Math.sin(direction) * speed;
+        return [x, y];
+      }
+
+      static createVectorFromComponents(x, y) {
+        return [x, y];
+      }
+
+      static addVectors(a, b) {
+        let x = a[0] + b[0];
+        let y = a[1] + b[1];
+        return [x, y];
+      }
+
+      static getDistance(a, b) {
+        let dx = a[0] - b[0];
+        let dy = a[1] - b[1];
+        return Math.sqrt(dx*dx + dy*dy);
+      }
+
+      static getAngle(a, b) {
+        return Math.atan2(b[1] - a[1], b[0] - a[0]);
+      }
+    }
+
+    class Particule {
+      constructor() {
+        this.position = [0, 0];
+        this.velocity = [0, 0];
+        this.radius = Math.random() * 5 + 2;
+      }
+
+      static create(x, y, speed, direction) {
+        let p = new Particule();
+        p.position = Utils.createVectorFromComponents(x, y);
+        p.velocity = Utils.createVectorFromDirection(speed, direction);
+        return p;
+      }
+
+      update() {
+        this.velocity[0] += 0;
+        this.velocity[1] += 0.1;
+        this.position[0] += this.velocity[0];
+        this.position[1] += this.velocity[1];
+      }
+
+      draw(context) {
+        context.save();
+        context.translate(this.position[0], this.position[1]);
+        context.rotate(this.rotation);
+        context.beginPath();
+        context.arc(0, 0, this.radius, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+      }
+    };
+
+    window.onload = function () {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let particules = [];
+      let spawnTimer = SPAWN_DELAY;
+      let oldTimestamp = 0;
+      let dt = 0;
+
+      render();
+
+      function render(ts) {
+        if (ts) {
+          dt = ts - oldTimestamp;
+          oldTimestamp = ts;
+        }
+
+        context.clearRect(0, 0, width, height);
+
+        if (particules.length < PARTICULES_MAX && spawnTimer <= 0) {
+          let direction = -Math.PI / 2 + (Math.random() * 2 - 1) * 0.2;
+          let speed = Math.random() * 5 + 3;
+          particules.push(Particule.create(width / 2, height, speed, direction));
+          spawnTimer = SPAWN_DELAY;
+        }
+
+        for (let i = 0; i < particules.length; i++) {
+          if (particules[i].position[1] + particules[i].radius >= height) {
+            particules[i].position[1] = height - particules[i].radius;
+            particules[i].velocity[1] = particules[i].velocity[1] * BOUNCE;
+          }
+          else if (particules[i].position[1] - particules[i].radius <= 0) {
+            particules[i].position[1] = particules[i].radius;
+            particules[i].velocity[1] = particules[i].velocity[1] * BOUNCE;
+          }
+
+          if (particules[i].position[0] + particules[i].radius >= width) {
+            particules[i].position[0] = width - particules[i].radius;
+            particules[i].velocity[0] = particules[i].velocity[0] * BOUNCE;
+          }
+          else if (particules[i].position[0] - particules[i].radius <= 0) {
+            particules[i].position[0] = particules[i].radius;
+            particules[i].velocity[0] = particules[i].velocity[0] * BOUNCE;
+          }
+
+          particules[i].update();
+          particules[i].draw(context);
+        }
+
+        spawnTimer -= dt;
+        requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+
+</html>

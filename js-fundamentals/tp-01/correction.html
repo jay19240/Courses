@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>TP01</title>
+</head>
+
+<body>
+</body>
+<script>
+  const SIDE_TYPE_CIRCLE = 0;
+  const SIDE_TYPE_TRIANGLE = 1;
+  const SIDE_TYPE_SQUARE = 2;
+
+  window.onload = function () {
+    let r1 = calcSquare(10, SIDE_TYPE_SQUARE);
+    console.log('L\'air d\'un carré de longueur 10 est ' + r1);
+  }
+
+  function calcSquare(sideLen, sideType) {
+    if (sideType == SIDE_TYPE_CIRCLE) {
+      return Math.pow(sideLen, 2) * Math.PI;
+    }
+    else if (sideType == SIDE_TYPE_TRIANGLE) {
+      return Math.pow(sideLen, 2) * Math.sqrt(3) / 4
+    }
+    else if (sideType == SIDE_TYPE_SQUARE) {
+      return Math.pow(sideLen, 2)
+    }
+    else {
+      return 0;
+    }
+  }
+</script>
+
+</html>

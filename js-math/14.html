@@ -1,0 +1,129 @@
+<!-- RECT COLLISION -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    class Utils {
+      static createVectorFromDirection(speed, direction) {
+        let x = Math.cos(direction) * speed;
+        let y = Math.sin(direction) * speed;
+        return [x, y];
+      }
+
+      static createVectorFromComponents(x, y) {
+        return [x, y];
+      }
+
+      static addVectors(va, vb) {
+        let x = va[0] + vb[0];
+        let y = va[1] + vb[1];
+        return [x, y];
+      }
+
+      static getDistance(pa, pb) {
+        let dx = pa[0] - pb[0];
+        let dy = pa[1] - pb[1];
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+
+      static getAngle(va, vb) {
+        return Math.atan2(vb[1] - va[1], vb[0] - va[0]);
+      }
+
+      static rectIntersect(ra, rb) {
+        return rb.x <= ra.x + ra.width &&
+        rb.x + rb.width >= ra.x &&
+        rb.y <= ra.y + ra.height &&
+        rb.y + rb.height >= ra.y;
+      }
+    }
+
+    class Rectangle {
+      constructor() {
+        this.x = 0;
+        this.y = 0;
+        this.width = 0;
+        this.height = 0;
+        this.color = 'black';
+      }
+
+      static create(x, y, width, height, color) {
+        let r = new Rectangle();
+        r.x = x;
+        r.y = y;
+        r.width = width;
+        r.height = height;
+        r.color = color;
+        return r;
+      }
+
+      draw(context) {
+        context.save();
+        context.beginPath();
+        context.fillStyle = this.color;
+        context.fillRect(this.x, this.y, this.width, this.height);
+        context.fill();
+        context.restore();
+      }
+    };
+
+    window.onload = function () {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      let r1 = Rectangle.create(width / 2 - 200, height / 2, 400, 200);
+      let r2 = Rectangle.create(0, 0, 200, 400);
+
+      document.addEventListener('mousemove', (e) => {
+        r2.x = e.clientX - r2.width / 2;
+        r2.y = e.clientY - r2.height / 2;
+      });
+
+      render();
+
+      function render(ts) {
+        context.clearRect(0, 0, width, height);
+        r1.draw(context);
+        r2.draw(context);
+
+        if (Utils.rectIntersect(r1, r2)) {
+          r1.color = 'red';
+          r2.color = 'red';
+        }
+        else {
+          r1.color = 'black';
+          r2.color = 'black';
+        }
+
+        requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+
+</html>

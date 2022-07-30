@@ -1,0 +1,61 @@
+<!-- ELLIPSE -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terrain de jeu</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- COURSE -->
+  <div class="course">
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <!-- COURSE -->
+
+  <script>
+    window.onload = function() {
+      let canvas = document.getElementById('canvas');
+      let context = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      let gravityX = width * .5;
+      let gravityY = height * .5;
+      let radius = height * .4;
+      let speed = 0.01;
+      let angle = 0;
+      let scaleX = 1.5;
+      let scaleY = 1;
+
+      render();
+
+      function render() {
+        let x = gravityX + Math.cos(angle) * radius * scaleX;
+        let y = gravityY + Math.sin(angle) * radius * scaleY;
+
+        context.clearRect(0, 0, width, height);
+        context.beginPath();
+        context.arc(x, y, 10, 0, Math.PI * 2, false);
+        context.fill();
+        
+        angle += speed;
+
+        requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+
+</html>

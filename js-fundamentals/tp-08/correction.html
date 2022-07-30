@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+</head>
+
+<body>
+  <pre id="csv">
+    Sexe,Prénom,Année de naissance
+    M,Alphonse,1932
+    F,Béatrice,1964
+    F,Charlotte,1988</pre>
+</body>
+<script>
+  window.onload = function () {    
+    let nodeCsv = document.getElementById('csv');
+    let data = parseCSV(nodeCsv.textContent);
+    console.log(data);
+  }
+
+  function parseCSV(csv) {
+    let matrix = [];
+    let lines = csv.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+      matrix[i] = [];
+      lines[i] = lines[i].trim();
+      let fields = lines[i].split(',');
+
+      for (let j = 0; j < fields.length; j++) {
+        matrix[i][j] = fields[j];
+      }
+    }
+
+    return matrix;
+  }
+</script>
+
+</html>

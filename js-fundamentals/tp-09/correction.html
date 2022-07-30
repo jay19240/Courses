@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+</head>
+
+<body>
+  <div>
+    <img id="car" src="img/voiture.png" style="position:relative;" />
+  </div>
+  <div>
+    <button id="ease">Ease-in</button>
+  </div>
+</body>
+<script>
+  window.onload = function () {
+    let imgCar = document.getElementById('car');
+    let btnEaseIn = document.getElementById('ease');
+
+    btnEaseIn.addEventListener('click', function () {
+      let timeStep = 1;
+      let timeElapsed = 0;
+      let destination = 800;
+      let duration = 1000;
+
+      let intervalId = setInterval(function () {
+        let v = ease_in(timeElapsed / duration);
+        imgCar.style.left = v * destination + 'px';
+        timeElapsed += timeStep;
+
+        if (timeElapsed >= duration) {
+          clearInterval(intervalId);
+        }
+      }, timeStep);
+    });
+  }
+
+  function ease_in(t) {
+    return Math.pow(t * 5, 2) * Math.pow(0.2, 2);
+  }
+</script>
+
+</html>

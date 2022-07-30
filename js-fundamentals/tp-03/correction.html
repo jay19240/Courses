@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>TP01</title>
+</head>
+
+<body>
+</body>
+<script>
+  window.onload = function () {
+    let vp = 0;
+    let vc = 1;
+    let vn = 0;
+
+    while(vc <= 144) {
+      console.log(vc);
+      vn = vp + vc;
+      vp = vc;
+      vc = vn;
+    }
+  }
+</script>
+
+</html>
